@@ -42,3 +42,8 @@
   font-style: italic;
   color: #888;
 }
+
+#binary-search .correct {
+  color: red;
+  font-weight: bold;
+}
