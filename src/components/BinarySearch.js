@@ -13,7 +13,8 @@ function BinarySearch() {
   const returnArray = (targetLength) => {
       let arr = [];
       while (arr.length < targetLength){
-          const newValue = Math.floor(Math.random() * targetLength);
+          
+          const newValue = Math.floor(Math.random() * (targetLength *2));
           console.log(`checking for presence of ${newValue} in array...`);
           if (arr.indexOf(newValue) === -1) arr.push(newValue);
       }
@@ -22,32 +23,35 @@ function BinarySearch() {
 
   }
 
-    const binarySearch = (arr, x) => { 
+    const binarySearch = (a, x) => { 
+        const arr = a.sort((a, b) => a - b);
         setGeneratedArray(arr);
    
-        let startValue=0;
-        let endValue=arr.length-1; 
+        let start=0;
+        let end=arr.length-1; 
+        setStart(start);
+        setEnd(end);
               
         // Iterate while start not meets end 
-        while (startValue <= endValue){ 
+        while (start <= end){ 
       
             // Find the mid index 
-            let mid=Math.floor((startValue + endValue)/2); 
+            let mid=Math.floor((start + end)/2); 
        
             // If element is present at mid, return True 
-            if (arr[mid]===x) return x; 
+            if (arr[mid]===x) return mid; 
       
             // Else look in left or right half accordingly 
             else if (arr[mid] < x)  {
-                startValue = mid + 1; 
-                 console.log(`new start = ${startValue}`);
-                 setStart(startValue);
-                }
+                 start = mid + 1; 
+                 console.log(`new start = ${start}`);
+                 setStart(start);
+                }   
             else{
-                endValue = mid - 1; 
+                 end = mid - 1; 
 
-                 console.log(`new end = ${endValue}`);
-                 setEnd(endValue);}
+                 console.log(`new end = ${end}`);
+                 setEnd(end);}
         } 
        
         return -1; 
@@ -55,14 +59,14 @@ function BinarySearch() {
 
     const printArray = () => {
         const items = generatedArray.map((val, i) => {
-            return <span className={`${i < start || i > end && 'excluded'}`} key={`binary-span-${i}`} >
+            return <span className={`${i === valueIndex && 'correct'} ${i <start && 'excluded'}  ${i > end && 'excluded'}`} key={`binary-span-${i}`} >
                 {`${val}, `}
             </span>
         })
         return( <p>{items}</p>);
     }
        
-    return(
+    return( 
         <div id="binary-search">   
             <h1>{'Binary Search'}</h1>
             <p>Length of array:</p>
