@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 
 function BinarySearch() {
 
-
-  const [arrayLength, setArrayLength] = useState(8);
+  const startingLength = 10;
+  const [arrayLength, setArrayLength] = useState(startingLength);
   const [x, setX] = useState(5);
-  const [valueIndex, setValueIndex] = useState(0)
+  const [valueIndex, setValueIndex] = useState(0);
   const [start, setStart] = useState(0);
-  const [end, setEnd] = useState(7);
+  const [end, setEnd] = useState(startingLength - 1);
+  const [generatedArray, setGeneratedArray] = useState([]);
 
   const returnArray = (targetLength) => {
       let arr = [];
@@ -22,38 +23,59 @@ function BinarySearch() {
   }
 
     const binarySearch = (arr, x) => { 
+        setGeneratedArray(arr);
    
-        let start=0;
-        let end=arr.length-1; 
+        let startValue=0;
+        let endValue=arr.length-1; 
               
         // Iterate while start not meets end 
-        while (start<=end){ 
+        while (startValue <= endValue){ 
       
             // Find the mid index 
-            let mid=Math.floor((start + end)/2); 
+            let mid=Math.floor((startValue + endValue)/2); 
        
             // If element is present at mid, return True 
             if (arr[mid]===x) return x; 
       
             // Else look in left or right half accordingly 
-            else if (arr[mid] < x)  
-                 start = mid + 1; 
-            else
-                 end = mid - 1; 
+            else if (arr[mid] < x)  {
+                startValue = mid + 1; 
+                 console.log(`new start = ${startValue}`);
+                 setStart(startValue);
+                }
+            else{
+                endValue = mid - 1; 
+
+                 console.log(`new end = ${endValue}`);
+                 setEnd(endValue);}
         } 
        
         return -1; 
     } 
+
+    const printArray = () => {
+        const items = generatedArray.map((val, i) => {
+            return <span className={`${i < start || i > end && 'excluded'}`} key={`binary-span-${i}`} >
+                {`${val}, `}
+            </span>
+        })
+        return( <p>{items}</p>);
+    }
        
     return(
         <div id="binary-search">   
             <h1>{'Binary Search'}</h1>
             <p>Length of array:</p>
-            <input value={arrayLength} onChange={(e) => {setArrayLength(e.target.value)}}></input>
+            <input value={arrayLength} onChange={(e) => {
+                setArrayLength(e.target.value);
+                setEnd(e.target.value - 1);
+                }}></input>
             <p>Value to search for:</p>
             <input value={x} onChange={(e) => {setX(e.target.value)}}></input>
             <p></p>
             <button onClick={() => {setValueIndex(binarySearch(returnArray(arrayLength), x))}}>Search</button>
+            <p>generated array:</p>
+            {printArray()}
             <p>{`Index of target value is ${valueIndex}`}</p>
         </div>
     )
